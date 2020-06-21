@@ -9,12 +9,11 @@ Utilisez le shortcode *children* pour lister les pages filles de la page et tous
 
 | Paramètre | Défaut | Description |
 |:--|:--|:--|
-| page | _current_ | Spécifie le nom de la page (nom de la section) à afficher |
 | style | "li" | Choisi le style à utiliser pour afficher les descendants. Cela peut être n'importe quel balise HTML |
 | showhidden | "false" | Quand *true*, pages filles cachées dans le menu seront affichées quand même |
-| description  | "false" | Permet d'inclure le texte de la description de la page sous chaque entré de la liste.<br/>quand aucune description existe pour la page, le shortcode prend les 70 premiers mots du contenu. [plus d'infos sur gohugo.io](https://gohugo.io/content/summaries/)  |
-| depth | 1 | Nombre de descendants à afficher. Par exemple, si la valeur est 2, le shortcode va afficher 2 niveaux de pages filels. <br/> **Astuce:** Utilisez 999 pour avoir tous les descendants|
-| sort | <rien> | Tri les pages filles par<br><li><strong>Weight</strong> - Poids</li><li><strong>Name</strong> - Nom</li><li><strong>Identifier</strong> - Trier alphabétiquement par identifiant configuré dans le front matter</li><li><strong>URL</strong> - URL</li> |
+| description  | "false" | Permet d'inclure le texte de la description de la page sous chaque entré de la liste. Quand aucune description existe pour la page, le shortcode prend les 70 premiers mots du contenu. [Plus d'infos sur gohugo.io](https://gohugo.io/content/summaries/) |
+| depth | 1 | Nombre de descendants à afficher. Par exemple, si la valeur est 2, le shortcode va afficher 2 niveaux de pages filels. **Astuce:** Utilisez 999 pour avoir tous les descendants |
+| sort | "Weight" | Tri les pages filles par **Weight** (poids -- l'ordre du menu), **Title** (titre de la page alphabétiquement), **PublishDate** (date de publication dans le *front matter*), **Date** (date dans le *front matter*) ou **Length** (longueur du contenu de la page) |
 
 ## Démo
 
@@ -34,12 +33,6 @@ Utilisez le shortcode *children* pour lister les pages filles de la page et tous
 
 {{% children style="h2" depth="3" description="true" %}}
 
-	{{%/* children style="div" depth="999" */%}}
+	{{%/* children style="div" depth="999" sort="Title" */%}}
 
-{{% children style="div" depth="999" %}}
-
-
-
-
-
-
+{{% children style="div" depth="999" sort="Title" %}}

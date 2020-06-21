@@ -9,12 +9,11 @@ Use the children shortcode to list the child pages of a page and the further des
 
 | Parameter | Default | Description |
 |:--|:--|:--|
-| page | _current_ | Specify the page name (section name) to display children for |
 | style | "li" | Choose the style used to display descendants. It could be any HTML tag name |
 | showhidden | "false" | When true, child pages hidden from the menu will be displayed |
 | description  | "false" | Allows you to include a short text under each page in the list. When no description exists for the page, children shortcode takes the first 70 words of your content. [Read more info about summaries on gohugo.io](https://gohugo.io/content/summaries/) |
-| depth | 1 | Enter a number to specify the depth of descendants to display. For example, if the value is 2, the shortcode will display 2 levels of child pages.  **Tips:** set 999 to get all descendants |
-| sort | none | Sort children by **Weight** - to sort on menu order, **Name** - to sort alphabetically on menu label, **Identifier** - to sort alphabetically on identifier set in frontmatter, and **URL** - to sort by URL |
+| depth | 1 | Enter a number to specify the depth of descendants to display. For example, if the value is 2, the shortcode will display 2 levels of child pages. **Tips:** set 999 to get all descendants |
+| sort | "Weight" | Sort children by **Weight** (menu order), **Title** (page title alphabetically), **PublishDate** (publish date in front matter), **Date** (date in front matter) or **Length** (page content length) |
 
 ## Demo
 
@@ -34,12 +33,6 @@ Use the children shortcode to list the child pages of a page and the further des
 
 {{% children style="h2" depth="3" description="true" %}}
 
-	{{%/* children style="div" depth="999" */%}}
+	{{%/* children style="div" depth="999" sort="Title" */%}}
 
-{{% children style="div" depth="999" %}}
-
-
-
-
-
-
+{{% children style="div" depth="999" sort="Title" %}}
