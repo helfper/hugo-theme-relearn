@@ -22,16 +22,19 @@
 
     <div class="highlightable">
     <ul class="topics">
-
-        {{if eq .Site.Params.ordersectionsby "title"}}
-          {{range .Site.Home.Sections.ByTitle}}
-          {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
-          {{end}}
-        {{else}}
-          {{range .Site.Home.Sections.ByWeight}}
-          {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
-          {{end}}
-        {{end}}
+      {{ $pages := .Site.Home.Sections }}
+      {{ if .Site.Params.rootPagesInMenu }}
+        {{ $pages = .Site.Home.Pages }}
+      {{ end }}
+      {{ $pages = where $pages "Params.hidden" "!=" true }}
+      {{if eq .Site.Params.orderSectionsBy "title"}}
+        {{ $pages = $pages.ByTitle }}
+      {{else}}
+        {{ $pages = $pages.ByWeight }}
+      {{end}}
+      {{range $pages}}
+        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
+      {{end}}
     </ul>
 
     {{ $disableShortcutsTitle := .Site.Params.DisableShortcutsTitle}}
@@ -106,7 +109,7 @@
 {{ $currentFileUniqueID := "" }}
 {{ with $currentNode.File }}{{ $currentFileUniqueID = .UniqueID }}{{ end }}
  {{with .sect}}
-  {{if and .IsSection (or (not .Params.hidden) $.showhidden)}}
+  {{if and .IsSection (not .Params.hidden)}}
     {{safeHTML .Params.head}}
     <li data-nav-id="{{.RelPermalink}}" title="{{.Title}}" class="dd-item
         {{if .IsAncestor $currentNode }}parent{{end}}
@@ -122,27 +125,15 @@
       {{ $numberOfPages := (add (len ( where .Pages "Params.hidden" "ne" true )) (len ( where .Sections "Params.hidden" "ne" true ))) }}
       {{ if ne $numberOfPages 0 }}
         <ul>
-          {{ $currentNode.Scratch.Set "pages" .Pages }}
-          {{ if .Sections}}
-            {{ $currentNode.Scratch.Set "pages" (.Pages | union .Sections) }}
+          {{ $pages := where .Pages "Params.hidden" "!=" true }}
+          {{if eq .Site.Params.orderSectionsBy "title"}}
+            {{ $pages = $pages.ByTitle }}
+          {{else}}
+            {{ $pages = $pages.ByWeight }}
           {{end}}
-          {{ $pages := ($currentNode.Scratch.Get "pages") }}
-
-        {{if eq .Site.Params.ordersectionsby "title"}}
-          {{ range $pages.ByTitle }}
-            {{ if and .Params.hidden (not $.showhidden) }}
-            {{else}}
+          {{range $pages}}
             {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
-            {{end}}
-          {{ end }}
-        {{else}}
-          {{ range $pages.ByWeight }}
-            {{ if and .Params.hidden (not $.showhidden) }}
-            {{else}}
-            {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
-            {{end}}
-          {{ end }}
-        {{end}}
+          {{end}}
         </ul>
       {{ end }}
     </li>

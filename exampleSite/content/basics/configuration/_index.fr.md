@@ -41,7 +41,9 @@ Notez que certains de ces paramètres sont expliqués en détails dans d'autres 
   # Quand vous utilisez un site multi-langue, utilisez ce paramètre pour désactiver le bouton de changement de langue.
   disableLanguageSwitchingButton = false
   # Ordonne les sections dans menu par poids ("weight") ou titre ("title"). Défaut à "weight"
-  ordersectionsby = "weight"
+  orderSectionsBy = "weight"
+  # Si défini à true, les pages non-section dans le répertoire racine "content" seron affiché dans le menu
+  rootPagesInMenu = false
   # Utilisez ce paramètre pour modifier le schéma de couleur du site. Les valeurs par défaut sont "red", "blue", "green".
   themeVariant = ""
   # Fournissez une liste de fichiers css personnalisés à charger par rapport depuis le dossier `static/` à la racine du site.

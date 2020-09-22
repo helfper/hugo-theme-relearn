@@ -9,7 +9,7 @@
         <!-- Next prev page -->
         {{ $currentNode := . }}
 
-        {{ template "menu-nextprev" dict "menu" .Site.Home "currentnode" $currentNode }}
+        {{ template "menu-nextprev" dict "menu" .Site.Home "currentnode" $currentNode "rootPagesInMenu" .Site.Params.rootPagesInMenu }}
 
         {{ define "menu-nextprev" }}
             {{$currentNode := .currentnode }}
@@ -24,18 +24,13 @@
                     {{end}}
                 {{end}}
                 {{ $currentNode.Scratch.Set "prevPageTmp" .menu }}
-
-                    {{ $currentNode.Scratch.Set "pages" .menu.Pages }}
-                    {{ if .menu.IsHome}}
-                        {{ $currentNode.Scratch.Set "pages" .menu.Sections }}
-                    {{ else if .menu.Sections}}
-                        {{ $currentNode.Scratch.Set "pages" (.menu.Pages | union .menu.Sections) }}
-                    {{end}}
-                    {{ $pages := ($currentNode.Scratch.Get "pages") }}
-
-                    {{ range $pages.ByWeight  }}
-                        {{ template "menu-nextprev" dict "menu" . "currentnode" $currentNode }}
-                    {{end}}
+                {{ $pages := .menu.Pages }}
+                {{ if and .menu.IsHome (not .rootPagesInMenu) }}
+                    {{ $pages = .menu.Sections }}
+                {{ end }}
+                {{ range $pages.ByWeight }}
+                    {{ template "menu-nextprev" dict "menu" . "currentnode" $currentNode "rootPagesInMenu" $.rootPagesInMenu }}
+                {{end}}
             {{ end }}
         {{ end }}
 
