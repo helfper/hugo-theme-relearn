@@ -63,7 +63,6 @@ a:hover {
 }
 pre {
     position: relative;
-    color: #ffffff;
 }
 .bg {
     background: #fff;
@@ -79,9 +78,6 @@ b, strong, label, th {
 }
 #grav-logo {
     max-width: 60%;
-}
-#grav-logo path {
-    fill: #fff !important;
 }
 #sidebar {
     font-weight: 300 !important;
@@ -646,7 +642,6 @@ code + .copy-to-clipboard {
 pre {
     padding: 1rem;
     margin: 2rem 0;
-    background: #282c34;
     border: 0;
     border-radius: 2px;
     line-height: 1.15;

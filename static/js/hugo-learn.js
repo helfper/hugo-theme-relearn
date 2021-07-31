@@ -15,7 +15,7 @@ var getUrlParameter = function getUrlParameter(sPageURL) {
 };
 
 // Execute actions on images generated from Markdown pages
-var images = $("div#body-inner img").not(".inline");
+var images = $("div#body-inner img").not(".inline").filter(function() { return $(this).css("display") !== "inline" });
 // Wrap image inside a featherlight (to get a full size view in a popup)
 images.wrap(function(){
   var image =$(this);
@@ -27,6 +27,15 @@ images.wrap(function(){
       return "<a href='" + image[0].src + "' data-featherlight='image'></a>";
     }
   }
+});
+
+$(document).ready(function() {
+  $.featherlight.prototype.afterContent = function() {
+    var title = this.$currentTarget.find('img').closest(".imageblock").find('.title').text();
+    if (title) {
+      $('<div class="title">').text(title).appendTo(this.$instance.find('.featherlight-content'));
+    }
+  };
 });
 
 // Change styles, depending on parameters set to the image
@@ -41,14 +50,14 @@ images.each(function(index){
       if (typeof w !== "undefined") {
         return w;
       } else {
-        return "auto";
+        return null;
       }
     });
     image.css("height", function() {
       if (typeof h !== "undefined") {
         return h;
       } else {
-        return "auto";
+        return null;
       }
     });
     if (typeof c !== "undefined") {

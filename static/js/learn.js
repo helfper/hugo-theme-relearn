@@ -226,6 +226,17 @@ jQuery(document).ready(function() {
         }
     }
 
+    $('.literalblock pre,.listingblock pre').each(function() {
+        var pre = $(this);
+        var block = $(this.parentNode.parentNode);
+        block.removeClass('literalblock');
+        block.addClass('listingblock');
+        pre.addClass(['highlightjs', 'highlight']);
+        var code = $('<code class="hljs"></code>');
+        code.append(this.firstChild);
+        pre.append(code);
+    });
+
     // clipboard
     var clipInit = false;
     $('code').each(function() {
