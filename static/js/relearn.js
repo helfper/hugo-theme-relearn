@@ -290,7 +290,6 @@ jQuery(function() {
         var searchValue = sessionStorage.getItem('search-value')
         $(document.body).removeClass('searchbox-hidden');
         $('[data-search-input]').val(searchValue);
-        $('[data-search-input]').trigger('input');
         var searchedElem = $('#body-inner').find(':contains(' + searchValue + ')').get(0);
         if (searchedElem) {
             searchedElem.scrollIntoView(true);

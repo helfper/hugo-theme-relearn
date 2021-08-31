@@ -46,9 +46,10 @@ function search(term) {
     // Find the item in our index corresponding to the lunr one to have more info
     // Remove Lunr special search characters: https://lunrjs.com/guides/searching.html
     var searchTerm = lunr.tokenizer(term.replace(/[*:^~+-]/, ' ')).flatMap(token => searchPatterns(token.str)).join(' ');
-    return !searchTerm ? [] : lunrIndex.search(searchTerm).map(function(result) {
-        return { index: result.ref, matches: Object.keys(result.matchData.metadata) }
+    var suggestions = !searchTerm ? [] : lunrIndex.search(searchTerm).map(function(result) {
+        return { index: result.ref, matches: Object.keys(result.matchData.metadata), value: result.ref }
     });
+    return { suggestions: suggestions };
 }
 
 function searchPatterns(word) {
@@ -63,42 +64,30 @@ function searchPatterns(word) {
 // Let's get started
 initLunr();
 $(function() {
-    var searchList = new autoComplete({
-        /* selector for the search box element */
-        selector: $('#search-by').get(0),
-        /* source is the callback to perform the search */
-        source: function(term, response) {
-            response(search(term));
+    $('#search-by').autocomplete({
+        appendTo: $('#search-by').parent(),
+        preserveInput: true,
+        lookup: function(query, done) {
+            done(search(query));
         },
-        /* renderItem displays individual search results */
-        renderItem: function(item, term) {
-            var page = pagesIndex[item.index];
+        formatResult: function(suggestion, currentValue) {
+            var page = pagesIndex[suggestion.index];
             var numContextWords = 2;
             var contextPattern = '(?:\\S+ +){0,' + numContextWords + '}\\S*\\b(?:' +
-                item.matches.map(match => match.replace(/\W/g, '\\$&')).join('|') +
+                suggestion.matches.map(match => match.replace(/\W/g, '\\$&')).join('|') +
                 ')\\b\\S*(?: +\\S+){0,' + numContextWords + '}';
             var context = page.content.match(new RegExp(contextPattern, 'i'));
             var divcontext = document.createElement('div');
             divcontext.className = 'context';
             divcontext.innerText = (context || '');
             var divsuggestion = document.createElement('div');
-            divsuggestion.className = 'autocomplete-suggestion';
-            divsuggestion.setAttribute('data-term', term);
-            divsuggestion.setAttribute('data-title', page.title);
-            divsuggestion.setAttribute('data-uri', baseUri + page.uri);
-            divsuggestion.setAttribute('data-context', context);
             divsuggestion.innerText = '» ' + page.title;
             divsuggestion.appendChild(divcontext);
-            return divsuggestion.outerHTML;
+            return divsuggestion.innerHTML;
         },
-        /* onSelect callback fires when a search suggestion is chosen */
-        onSelect: function(e, term, item) {
-            location.href = item.getAttribute('data-uri');
+        onSelect: function(suggestion) {
+            var page = pagesIndex[suggestion.index];
+            location.href = baseUri + page.uri;
         }
     });
-
-    // JavaScript-autoComplete only registers the focus event when minChars is 0 which doesn't make sense, let's do it ourselves
-    // https://github.com/Pixabay/JavaScript-autoComplete/blob/master/auto-complete.js#L191
-    var selector = $('#search-by').get(0);
-    $(selector).focus(selector.focusHandler);
 });

@@ -15,6 +15,7 @@
     overflow-y: auto;
     box-sizing: border-box;
 }
+
 .autocomplete-suggestion {
     position: relative;
     cursor: pointer;
@@ -31,7 +32,7 @@
     color: #1f8dd6;
 }
 
-.autocomplete-suggestion.selected {
+.autocomplete-selected {
     background: #333;
     color: #fff;
 }

@@ -177,7 +177,7 @@ a:hover {
     background: var(--MENU-SECTIONS-ACTIVE-BG-color);
 }
 
-#sidebar .searchbox * {
+#sidebar .searchbox input {
     color: var(--MENU-SEARCH-BOX-ICONS-color);
 }
 
